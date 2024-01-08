@@ -18,6 +18,9 @@
 ## 初回起動時 ...未作成
 - nomodesetを指定
 
+## vimインストール
+- `sudo apt-get install vim`を実行
+
 ## nvidia driverインストール ...未作成
 
 ## grub設定
