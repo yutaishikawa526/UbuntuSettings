@@ -15,9 +15,15 @@
 
 ### fstab設定
 
+## 初回起動時 ...未作成
+- nomodesetを指定
+
 ## nvidia driverインストール ...未作成
 
-## grub設定 ...未作成
+## grub設定
+1. `/etc/default/grub`の`GRUB_DEFAULT`を`GRUB_DEFAULT="Ubuntu, with Linux 6.2.0-26-generic"`に指定
+2. `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`を`GRUB_CMDLINE_LINUX_DEFAULT=""`に指定
+3. `update-grub`を実行
 
 ## openVPN設定 ...未作成
 
