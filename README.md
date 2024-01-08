@@ -26,7 +26,8 @@
 ## grub設定
 1. `/etc/default/grub`の`GRUB_DEFAULT`を`GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 6.2.0-26-generic"`に指定
 2. `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`を`GRUB_CMDLINE_LINUX_DEFAULT=""`に指定
-3. `update-grub`を実行
+3. `/etc/default/grub`の`GRUB_DISABLE_OS_PROBER`を`GRUB_DISABLE_OS_PROBER=false`に指定
+4. `update-grub`を実行
 
 ## openVPN設定 ...未作成
 
