@@ -29,7 +29,9 @@
 3. `/etc/default/grub`の`GRUB_DISABLE_OS_PROBER`を`GRUB_DISABLE_OS_PROBER=false`に指定
 4. `update-grub`を実行
 
-## openVPN設定 ...未作成
+## openVPN設定
+1. [サーバー側openVPN設定シェル](/sh/openVPNSettings.sh)の実行
+2. `~/openVPNSettings`にクライアント用の認証情報が作成されるので、接続するクライアントPCに鍵を移行してopenVPN等で接続(参考サイトを参照)
 
 ## ssh設定 ...未作成
 
@@ -37,4 +39,4 @@
 - [パーティション作成](https://qiita.com/kakkie/items/8f960f2dc5eb6e591d9d)
 - [ドライバー確認](https://qiita.com/aosho235/items/079b37a9485041b96ed0)
 - [nvidia driverインストール](https://qiita.com/porizou1/items/74d8264d6381ee2941bd)
-
+- [client openVPN](https://www.openvpn.jp/download/)
