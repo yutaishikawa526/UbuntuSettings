@@ -44,7 +44,7 @@
 ## ssh設定
 1. [sshサーバー設定シェル](/sh/sshServerSettings.sh)の実行
 2. `~/sshSettings`にクライアント用の認証情報が作成されるので、接続するクライアントPCに鍵を移行してssh接続
-    - [openVPN設定](##openVPN設定)を行ってから実行すること
+    - [openVPN設定](#openVPN設定)を行ってから実行すること
 
 ## 参考サイト
 - [パーティション作成](https://qiita.com/kakkie/items/8f960f2dc5eb6e591d9d)
