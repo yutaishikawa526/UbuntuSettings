@@ -15,13 +15,21 @@
 
 ### fstab設定
 
-## 初回起動時 ...未作成
-- nomodesetを指定
+## 初回起動時
+- 初回起動時はgpuドライバーの問題で画面描画がおかしくなる
+- grub画面をshift連打で呼び出し、カーネルのコマンドに`nomodeset`を指定する
 
-## vimインストール
-- `sudo apt-get install vim`を実行
+## いくつかのパッケージインストール
+- `sudo apt-get install vim git`でvim,gitをインストール
 
-## nvidia driverインストール ...未作成
+## nvidia driverインストール
+1. `sudo apt-get --purge remove nvidia-*`で既存のnvidiaドライバーのアンインストール
+2. `sudo apt-get --purge remove cuda-*`で既存のCUDAのアンインストール
+3. `sudo add-apt-repository ppa:graphics-drivers/ppa`
+4. `sudo apt update`
+5. `sudo apt install nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`で確認)
+6. `sudo reboot`再起動
+7. `nvidia-smi`で確認
 
 ## grub設定
 1. `/etc/default/grub`の`GRUB_DEFAULT`を`GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 6.2.0-26-generic"`に指定
