@@ -20,14 +20,14 @@
 - grub画面をshift連打で呼び出し、カーネルのコマンドに`nomodeset`を指定する
 
 ## いくつかのパッケージインストール
-- `sudo apt-get install vim git`でvim,gitをインストール
+- `sudo apt-get install -y vim git curl`でvim,git,curlをインストール
 
 ## nvidia driverインストール
 1. `sudo apt-get --purge remove nvidia-*`で既存のnvidiaドライバーのアンインストール
 2. `sudo apt-get --purge remove cuda-*`で既存のCUDAのアンインストール
 3. `sudo add-apt-repository ppa:graphics-drivers/ppa`
 4. `sudo apt update`
-5. `sudo apt install nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`で確認)
+5. `sudo apt install -y nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`で確認)
 6. `sudo reboot`再起動
 7. `nvidia-smi`で確認
 
