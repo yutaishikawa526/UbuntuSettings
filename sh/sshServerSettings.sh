@@ -71,6 +71,10 @@ sudo chmod 600 /etc/ssh/authorized_keys
 ## 公開鍵削除
 rm id_rsa_ssh_main.pub
 
+## ファイアーウォール設定
+sudo ufw allow 22/tcp
+sudo ufw enable
+
 ## 再起動
 sudo systemctl restart ssh
 
