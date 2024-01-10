@@ -51,7 +51,6 @@ sudo touch /etc/openvpn/server.conf
     echo 'push "route 10.8.0.0 255.255.255.0"'
     echo 'push "dhcp-option DNS 8.8.8.8"'
     echo ''
-    echo 'client-to-client'
     echo 'keepalive 10 120'
     echo ''
     echo 'user  nobody'
