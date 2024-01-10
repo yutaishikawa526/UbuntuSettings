@@ -53,8 +53,6 @@ sudo touch /etc/openvpn/server.conf
     echo ''
     echo 'client-to-client'
     echo 'keepalive 10 120'
-    echo 'compress lzo'
-    echo 'push "compress lzo"'
     echo ''
     echo 'user  nobody'
     echo 'group nogroup'
