@@ -33,7 +33,6 @@ sudo chmod 600 /etc/ssh/authorized_keys
     echo 'MaxAuthTries 6'
     echo 'MaxSessions 10'
     echo ''
-    echo 'RSAAuthentication yes'
     echo 'PubkeyAuthentication yes'
     echo 'AuthorizedKeysFile /etc/ssh/authorized_keys'
     echo ''
