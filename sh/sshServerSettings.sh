@@ -10,14 +10,18 @@ sudo apt -y install openssh-server
 mkdir ~/sshSettings
 cd ~/sshSettings
 
+## ホームディレクトリ
+HOME_DIR=`cd ~;pwd`
+AUTH_KEY_PATH="$HOME_DIR/.ssh/authorized_keys"
+
 ## 自動起動設定
 sudo systemctl enable ssh
 
 ## クライアント用秘密鍵、公開鍵の作成
 ssh-keygen -t rsa -b 2048  -C ''  -f id_rsa_ssh_main
-sudo touch /etc/ssh/authorized_keys
-cat id_rsa_ssh_main.pub | sudo sh -c 'cat - >> /etc/ssh/authorized_keys'
-sudo chmod 600 /etc/ssh/authorized_keys
+sudo touch "$AUTH_KEY_PATH"
+cat id_rsa_ssh_main.pub | sudo sh -c 'cat - >> '"$AUTH_KEY_PATH"
+sudo chmod 600 "$AUTH_KEY_PATH"
 
 ## 設定ファイルの修正
 {
@@ -34,7 +38,7 @@ sudo chmod 600 /etc/ssh/authorized_keys
     echo 'MaxSessions 10'
     echo ''
     echo 'PubkeyAuthentication yes'
-    echo 'AuthorizedKeysFile /etc/ssh/authorized_keys'
+    echo "AuthorizedKeysFile $AUTH_KEY_PATH"
     echo ''
     echo 'KbdInteractiveAuthentication no'
     echo ''
