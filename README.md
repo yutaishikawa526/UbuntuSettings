@@ -3,10 +3,11 @@
 ## 概要
 - ubuntuのデスクトップインストール手順からインストール後の諸々設定手順を記述
 
-## ubuntuインストール
+## ubuntu手動インストール
 - [パーティション作成のシェル](/sh/setupPartition.sh)を実行する
 - [設定ファイル](/conf/ubuntu_conf-sample.sh)を適切に変更したものをファイル名を`ubuntu_conf.sh`で作成する
 - [ubuntu手動インストールのシェル](/sh/installUbuntu.sh)を実行し`reboot`する
+- liveメディアによるインストールの場合は[ここ](https://lang-ship.com/blog/work/usb-ssd-ubuntu/)を参考にしてインストールする
 
 ## 初回起動時
 - 初回起動時はgpuドライバーの問題で画面描画がおかしくなる

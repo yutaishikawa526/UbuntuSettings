@@ -20,6 +20,14 @@ start_otherpkg=4
 start_settings=5
 start_grub=6
 
+# マウント済みならumount
+while read mount_str ; do
+    cmd=`echo "$mount_str" | sed -r 's#^[^ ]+ on ([^ ]+) .*$#sudo umount \1 #' `
+    eval "$cmd"
+done << END
+`sudo mount | grep -E "^($_EFI_PART|$_ROOT_PART) on $_MOUNT_DIR(/boot/efi)? " | tac`
+END
+
 # マウント
 sudo mount "$_ROOT_PART" "$_MOUNT_DIR"
 sudo mkdir -p "$_MOUNT_DIR"/boot/efi
@@ -37,7 +45,7 @@ fi
 if [ "$_START_NUMBER" -le "$start_deb" ]; then
 
 # debootstrapでの最小構成の設置
-sudo debootstrap --arch "$_DEBOOT_TARGET" --variant minbase jammy "$_MOUNT_DIR" http://de.archive.ubuntu.com/ubuntu
+sudo debootstrap --arch "$_DEBOOT_TARGET" jammy "$_MOUNT_DIR" http://de.archive.ubuntu.com/ubuntu
 
 fi
 
@@ -64,7 +72,6 @@ sudo arch-chroot "$_MOUNT_DIR" << EOF
     apt install -y --no-install-recommends \
         linux-{image,headers}-$_LINUX_KERNEL_VER-generic \
         linux-firmware initramfs-tools efibootmgr
-    apt install -y ubuntu-minimal
     exit
 EOF
 
