@@ -4,6 +4,8 @@
 - ubuntuのデスクトップインストール手順からインストール後の諸々設定手順を記述
 
 ## ubuntuインストール
+- [パーティション作成のシェル](/sh/setupPartition.sh)を実行する
+- [設定ファイル](/conf/ubuntu_conf-sample.sh)を適切に変更したものをファイル名を`ubuntu_conf.sh`で作成する
 - [ubuntu手動インストールのシェル](/sh/installUbuntu.sh)を実行し`reboot`する
 
 ## 初回起動時
