@@ -73,14 +73,11 @@ exit
 EOF
 
 # root、ユーザーの設定
-arch-chroot "$_MOUNT_DIR" << EOF
 echo "root password"
-passwd
+arch-chroot "$_MOUNT_DIR" passwd
 echo "user: $_USER password"
-useradd -mG sudo "$_USER"
-passwd "$_USER"
-exit
-EOF
+arch-chroot "$_MOUNT_DIR" useradd -mG sudo "$_USER"
+arch-chroot "$_MOUNT_DIR" passwd "$_USER"
 
 # ネットワーク設定
 arch-chroot "$_MOUNT_DIR" << EOF
