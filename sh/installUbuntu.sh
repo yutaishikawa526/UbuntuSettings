@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# sudoで実行する必要があります。
 # ubuntuの手動インストール手順
 # 参考サイト: https://gist.github.com/subrezon/9c04d10635ebbfb737816c5196c8ca24 , https://heywoodlh.io/minimal-ubuntu-install
 
@@ -11,9 +12,7 @@ _LOCALHOST=localhost
 _USER=user
 _NETWORK_INTERFACE=enp1s0
 _MOUNT_DIR=/mnt/tmp
-
-# rootログイン
-sudo su
+_GRUB_EFI_PACKAGE=grub-efi-amd64
 
 # 必要なパッケージの追加
 # arch-install-scriptsはarch-chrootをするためのパッケージ
@@ -104,7 +103,7 @@ EOF
 
 # grub設定
 arch-chroot "$_MOUNT_DIR" << EOF
-apt install grub-efi-amd64
+apt install -y "$_GRUB_EFI_PACKAGE"
 grub-install "$_DISK"
 update-grub
 exit
