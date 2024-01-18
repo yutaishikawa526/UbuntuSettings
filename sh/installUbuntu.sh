@@ -4,8 +4,8 @@
 # 参考サイト: https://gist.github.com/subrezon/9c04d10635ebbfb737816c5196c8ca24 , https://heywoodlh.io/minimal-ubuntu-install
 
 _DISK=/dev/sdb
-_EFI_PART=sdb1
-_ROOT_PART=sdb2
+_EFI_PART=/dev/sdb1
+_ROOT_PART=/dev/sdb2
 _LINUX_KERNEL_VER=6.2.0-26
 _LOCALHOST=localhost
 _USER=user
