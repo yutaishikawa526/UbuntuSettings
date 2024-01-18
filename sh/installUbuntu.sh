@@ -44,9 +44,9 @@ genfstab -U "$_MOUNT_DIR" >> "$_MOUNT_DIR"/etc/fstab
 
 # aptのミラーサイト設定
 {
-  echo 'deb http://de.archive.ubuntu.com/ubuntu jammy           main restricted universe'
-  echo 'deb http://de.archive.ubuntu.com/ubuntu jammy-security  main restricted universe'
-  echo 'deb http://de.archive.ubuntu.com/ubuntu jammy-updates   main restricted universe'
+    echo 'deb http://de.archive.ubuntu.com/ubuntu jammy           main restricted universe'
+    echo 'deb http://de.archive.ubuntu.com/ubuntu jammy-security  main restricted universe'
+    echo 'deb http://de.archive.ubuntu.com/ubuntu jammy-updates   main restricted universe'
 } > "$_MOUNT_DIR"/etc/apt/sources.list
 
 # カーネルのインストール
@@ -86,11 +86,11 @@ EOF
 arch-chroot "$_MOUNT_DIR" << EOF
 systemctl enable systemd-networkd
 {
-echo '[Match]'
-echo "Name=$_NETWORK_INTERFACE"
-echo ''
-echo '[Network]'
-echo 'DHCP=yes'
+    echo '[Match]'
+    echo "Name=$_NETWORK_INTERFACE"
+    echo ''
+    echo '[Network]'
+    echo 'DHCP=yes'
 } > /etc/systemd/network/ethernet.network
 exit
 EOF
@@ -112,8 +112,5 @@ EOF
 # umount
 umount "$_MOUNT_DIR"/boot/efi
 umount "$_MOUNT_DIR"
-
-# root exit
-exit
 
 # fin
