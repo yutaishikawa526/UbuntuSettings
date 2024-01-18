@@ -11,13 +11,22 @@ if [ ! -e "$conf_file_path" ]; then
 fi
 source "$conf_file_path"
 
+# 実行開始場所
+start_apt_deb=0
+start_deb=1
+start_fstab=2
+start_kernel=3
+start_otherpkg=4
+start_settings=5
+start_grub=6
+
 # マウント
 sudo mount "$_ROOT_PART" "$_MOUNT_DIR"
 sudo mkdir -p "$_MOUNT_DIR"/boot/efi
 sudo mount "$_EFI_PART" "$_MOUNT_DIR"/boot/efi
 
 # -------------------------- 必要なパッケージの追加 --------------------------
-if [ "$_START_NUMBER" -le 0 ]; then
+if [ "$_START_NUMBER" -le "$start_apt_deb" ]; then
     # arch-install-scriptsはarch-chrootをするためのパッケージ
     sudo add-apt-repository universe
     sudo apt update
@@ -25,13 +34,18 @@ if [ "$_START_NUMBER" -le 0 ]; then
 fi
 
 # -------------------------- debootstrap周り --------------------------
-if [ "$_START_NUMBER" -le 1 ]; then
+if [ "$_START_NUMBER" -le "$start_deb" ]; then
 
 # debootstrapでの最小構成の設置
 sudo debootstrap --arch "$_DEBOOT_TARGET" --variant minbase jammy "$_MOUNT_DIR" http://de.archive.ubuntu.com/ubuntu
 
+fi
+
+# -------------------------- fstab,aptの設定 --------------------------
+if [ "$_START_NUMBER" -le "$start_fstab" ]; then
+
 # fstabの設定
-sudo genfstab -U "$_MOUNT_DIR" >> "$_MOUNT_DIR"/etc/fstab
+sudo genfstab -U "$_MOUNT_DIR" | sudo sh -c "cat >> $_MOUNT_DIR/etc/fstab"
 
 # aptのミラーサイト設定
 {
@@ -43,7 +57,7 @@ sudo genfstab -U "$_MOUNT_DIR" >> "$_MOUNT_DIR"/etc/fstab
 fi
 
 # -------------------------- カーネルのインストール --------------------------
-if [ "$_START_NUMBER" -le 2 ]; then
+if [ "$_START_NUMBER" -le "$start_kernel" ]; then
 
 sudo arch-chroot "$_MOUNT_DIR" << EOF
     apt update
@@ -56,8 +70,8 @@ EOF
 
 fi
 
-# -------------------------- パッケージのインストール --------------------------
-if [ "$_START_NUMBER" -le 3 ]; 
+# -------------------------- その他パッケージのインストール --------------------------
+if [ "$_START_NUMBER" -le "$start_otherpkg" ]; then
 
 sudo arch-chroot "$_MOUNT_DIR" << EOF
     apt install -y vim curl git
@@ -67,7 +81,7 @@ EOF
 fi
 
 # ------------------------------- その他設定 -------------------------------
-if [ "$_START_NUMBER" -le 4 ]; then
+if [ "$_START_NUMBER" -le "$start_settings" ]; then
 
 # 日付、地域、キーボードの設定
 sudo arch-chroot "$_MOUNT_DIR" << EOF
@@ -114,7 +128,7 @@ fi
 #EOF
 
 # grub設定
-if [ "$_START_NUMBER" -le 5 ]; then
+if [ "$_START_NUMBER" -le "$start_grub" ]; then
 
 sudo arch-chroot "$_MOUNT_DIR" << EOF
     apt install -y $_GRUB_EFI_PACKAGE
