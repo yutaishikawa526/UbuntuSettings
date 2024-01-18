@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # ubuntuの手動インストール手順
 # 参考サイト: https://gist.github.com/subrezon/9c04d10635ebbfb737816c5196c8ca24 , https://heywoodlh.io/minimal-ubuntu-install
 
