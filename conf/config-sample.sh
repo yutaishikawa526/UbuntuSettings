@@ -3,6 +3,10 @@
 # 設定値のサンプル
 # config.shファイルを作成し、そこに記載する
 
+# [installUbuntu.sh]をどのポイントから開始するかを指定する
+# 数が大きいほど後ろから開始する
+# 場所と数字の関係はコードを参照
+_START_NUMBER=0
 # rootとefiパーティションがあるディスク名
 # [sudo fdisk -l]でefiとboot含め確認できる
 _DISK=/dev/sdb

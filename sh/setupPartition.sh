@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # パーティションの作成を実行する
 
@@ -13,3 +13,16 @@ sudo gdisk "$_PARTTION_DISK"
 
 # パーティション作成の反映
 sudo partprobe
+
+echo 'パーティションの候補'
+sudo fdisk -l | grep "$_PARTTION_DISK"
+
+echo "efiパーティションを選択してください。"
+read -p ":" _EFI_DISK
+
+echo "rootパーティションを選択してください。"
+read -p ":" _ROOT_DISK
+
+# パーティションのフォーマット
+sudo mkfs.vfat "$_EFI_DISK"
+sudo mkfs.ext4 "$_ROOT_DISK"

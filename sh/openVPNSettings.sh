@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ## openVPNによるVPNの設定
 ## 最終的には~/openVPNSettingsディレクトリにクライアント用の鍵と証明書が作成される

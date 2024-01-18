@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # sshのサーバー設定
 # 最終的には~/sshSettingsディレクトリにssh接続用の秘密鍵が残る
