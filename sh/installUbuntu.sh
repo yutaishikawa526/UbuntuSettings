@@ -13,6 +13,7 @@ _USER=user
 _NETWORK_INTERFACE=enp1s0
 _MOUNT_DIR=/mnt/tmp
 _GRUB_EFI_PACKAGE=grub-efi-amd64
+_GRUB_TARGET=x86_64-efi
 
 # 必要なパッケージの追加
 # arch-install-scriptsはarch-chrootをするためのパッケージ
@@ -52,7 +53,7 @@ genfstab -U "$_MOUNT_DIR" >> "$_MOUNT_DIR"/etc/fstab
 # カーネルのインストール
 arch-chroot "$_MOUNT_DIR" << EOF
 apt update
-apt install -y --no-install-recommends linux-{image,headers}-"$_LINUX_KERNEL_VER"-generic linux-firmware initramfs-tools efibootmgr
+apt install -y --no-install-recommends linux-{image,headers}-${_LINUX_KERNEL_VER}-generic linux-firmware initramfs-tools efibootmgr
 apt install -y vim
 exit
 EOF
@@ -67,8 +68,8 @@ EOF
 
 # localhostの指定
 arch-chroot "$_MOUNT_DIR" << EOF
-echo "$_LOCALHOST" > /etc/hostname
-echo "127.0.0.1 $_LOCALHOST" >> /etc/hosts
+echo ${_LOCALHOST} > /etc/hostname
+echo "127.0.0.1 ${_LOCALHOST}" >> /etc/hosts
 exit
 EOF
 
@@ -84,7 +85,7 @@ arch-chroot "$_MOUNT_DIR" << EOF
 systemctl enable systemd-networkd
 {
     echo '[Match]'
-    echo "Name=$_NETWORK_INTERFACE"
+    echo "Name=${_NETWORK_INTERFACE}"
     echo ''
     echo '[Network]'
     echo 'DHCP=yes'
@@ -100,8 +101,8 @@ EOF
 
 # grub設定
 arch-chroot "$_MOUNT_DIR" << EOF
-apt install -y "$_GRUB_EFI_PACKAGE"
-grub-install "$_DISK"
+apt install -y ${_GRUB_EFI_PACKAGE}
+grub-install ${_DISK} --target=${_GRUB_TARGET}
 update-grub
 exit
 EOF
