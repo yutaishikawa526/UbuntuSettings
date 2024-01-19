@@ -10,3 +10,6 @@ bash "$_COM_DIR/mount.sh"
 bash "$_COM_DIR/sys_setup.sh"
 
 sudo chroot "$_MNT_DIR"
+
+# umount
+bash "$_COM_DIR/unset.sh"
