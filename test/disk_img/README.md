@@ -2,4 +2,4 @@
 
 ディスクイメージを作成してインストールするテスト
 
-[サンプルの設定ファイル](/conf/conf-sample.sh)を修正し、「conf/conf.sh」として保存する
+[サンプルの設定ファイル](./conf/conf-sample.sh)を修正し、「conf/conf.sh」として保存する
