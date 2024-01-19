@@ -9,7 +9,7 @@ source "$_DIR/conf/conf.sh"
 bash "$_COM_DIR/mount.sh"
 bash "$_COM_DIR/sys_setup.sh"
 
-sudo chroot "$_MOUNT_DIR" << EOF
+sudo chroot "$_MNT_DIR" << EOF
     apt install -y $_GRUB_EFI_PACKAGE
     grub-install $_DISK_EFI --target=$_GRUB_TARGET
     update-grub

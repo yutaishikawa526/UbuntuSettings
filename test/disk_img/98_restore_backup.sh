@@ -23,7 +23,5 @@ fi
 # clear
 bash "$_COM_DIR/clear.sh"
 
-sudo mv "$backup_dir/$_EFI_FNAME" "$_DISK_EFI"
-sudo mv "$backup_dir/$_ROOT_FNAME" "$_DISK_ROOT"
-
-sudo rm -r "$backup_dir"
+sudo cp "$backup_dir/$_EFI_FNAME" "$_DISK_DIR"
+sudo cp "$backup_dir/$_ROOT_FNAME" "$_DISK_DIR"

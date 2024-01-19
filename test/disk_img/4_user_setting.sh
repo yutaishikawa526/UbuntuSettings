@@ -11,12 +11,11 @@ bash "$_COM_DIR/sys_setup.sh"
 
 # 日付、地域、キーボードの設定
 sudo chroot "$_MNT_DIR" << EOF
-    timedatectl set-timezone Asia/Tokyo
-    locale-gen en_US.UTF-8
-    localectl set-locale en_US.UTF-8
+    dpkg-reconfigure tzdata
+    dpkg-reconfigure locales
+    dpkg-reconfigure keyboard-configuration
     exit
 EOF
-sudo chroot "$_MNT_DIR" dpkg-reconfigure keyboard-configuration
 
 # localhostの指定
 sudo chroot "$_MNT_DIR" << EOF

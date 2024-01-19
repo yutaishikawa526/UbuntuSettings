@@ -6,7 +6,13 @@
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
 
-backup_dir="$_DISK_DIR/"`date +%Y%m%d_%H-%M-%S`'_backup/'
+echo 'バックアップ名を入力してください。'
+read -p ":" b_name
+backup_dir="$_DISK_DIR/$b_name"
+if [[ "$b_name" =~ ^$ ]]; then
+    echo 'バックアップ名が未指定です。'
+    exit 1
+fi
 if [ -d "$backup_dir" ]; then
     echo 'すでにバックアップディレクトリが存在します。'
     exit 1

@@ -13,6 +13,7 @@ bash "$_COM_DIR/sys_setup.sh"
 sudo chroot "$_MNT_DIR" << EOF
     apt update
     apt install -y --no-install-recommends linux-image-$_KERNEL_VER-generic \
+        ubuntu-minimal \
         $_KERNEL_OTHER_INSTALL
     exit
 EOF
