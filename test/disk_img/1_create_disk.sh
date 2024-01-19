@@ -3,8 +3,6 @@
 # ディスク作成
 # それぞれefi用とroot用を作成する
 
-sudo apt update
-
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
 

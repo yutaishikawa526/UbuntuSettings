@@ -2,8 +2,6 @@
 
 # カーネルのインストール
 
-sudo apt update
-
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
 
