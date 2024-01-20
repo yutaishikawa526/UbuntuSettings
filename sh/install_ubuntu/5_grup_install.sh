@@ -13,7 +13,7 @@ sudo chroot "$_MNT_DIR" << EOF
     apt install -y $_GRUB_EFI_PACKAGE
     grub-install $_DISK_EFI --target=$_GRUB_TARGET
     update-grub
-    sed -i 's@^GRUB_CMDLINE_LINUX_DEFAULT=.*$@GRUB_CMDLINE_LINUX_DEFAULT=""@g' /etc/default/grub
+    sed -i 's/^GRUB_CMDLINE_LINUX_DEFAULT=.*$/GRUB_CMDLINE_LINUX_DEFAULT=""/g' /etc/default/grub
     update-grub
     exit
 EOF
