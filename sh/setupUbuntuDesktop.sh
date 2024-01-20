@@ -1,20 +1,13 @@
 #!/bin/bash -e
 
 # ubuntuのデスクトップ環境を構築する
-# 「install_ubuntu」の手順の場合はCUIでしかアクセスできないため、
-# ここでGUIの設定をする
+# 「install_ubuntu」の手順の場合はCUIでしかアクセスできないため、ここでGUIの設定をする
+# 以下の処理はubuntuのインストールが完了し、ubuntuをCUIで起動したあと、そのCUIから実行することを想定している
 
-# ---------- 未作成 ----------
-
+sudo apt update
 
 # いくつかのパッケージインストール
-sudo apt-get install -y vim git curl
+sudo apt install -y vim git curl
 
-## nvidia driverインストール
-#1. `sudo apt-get --purge remove nvidia-*`で既存のnvidiaドライバーのアンインストール
-#2. `sudo apt-get --purge remove cuda-*`で既存のCUDAのアンインストール
-#3. `sudo add-apt-repository ppa:graphics-drivers/ppa`
-#4. `sudo apt update`
-#5. `sudo apt install -y nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`で確認)
-#6. `sudo reboot`再起動
-#7. `nvidia-smi`で確認
+# デスクトップ用パッケージのインストール
+sudo apt install -y ubuntu-gnome-desktop

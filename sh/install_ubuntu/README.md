@@ -27,3 +27,7 @@ efi用とroot用の2種類作成し、それぞれ`./disk`ディレクトリに�
 
 - `5_grub_install.sh`
 grubのインストールを行う
+
+# 蛇足
+`3_kernel_install.sh`で`ubuntu-minimal`をインストールしているが、なくても起動は可能\
+ただしその場合は`4_user_setting.sh`で使用している`systemd-networkd`や`dpkg-reconfigure *`が使えなかったため導入した

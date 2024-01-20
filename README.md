@@ -19,6 +19,15 @@
     1. `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`を`GRUB_CMDLINE_LINUX_DEFAULT=""`に指定
     2. `update-grub`を実行
 
+## nvidia driverのインストール
+1. `sudo apt-get --purge remove nvidia-*`で既存のnvidiaドライバーのアンインストール
+2. `sudo apt-get --purge remove cuda-*`で既存のCUDAのアンインストール
+3. `sudo add-apt-repository ppa:graphics-drivers/ppa`でリポジトリ登録
+4. `sudo apt update`
+5. `sudo apt install -y nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`でrecommendとなっているものにする)
+6. `sudo reboot`再起動
+7. `nvidia-smi`で確認
+
 ## openVPN設定
 1. [サーバー側openVPN設定シェル](/sh/openVPNSettings.sh)の実行
 2. `~/openVPNSettings`にクライアント用の認証情報が作成されるので、接続するクライアントPCに鍵を移行してopenVPN等で接続(参考サイトを参照)
@@ -43,3 +52,7 @@
 - [ドライバー確認](https://qiita.com/aosho235/items/079b37a9485041b96ed0)
 - [nvidia driverインストール](https://qiita.com/porizou1/items/74d8264d6381ee2941bd)
 - [client openVPN](https://www.openvpn.jp/download/)
+- [Ubuntuの手動インストール](https://gist.github.com/subrezon/9c04d10635ebbfb737816c5196c8ca24)
+- [debootstrapのvariantによる違いについて](https://zat.ifdef.jp/html/2008/04-03.html)
+- [man debootstrapの情報が記載](https://linux.die.net/man/8/debootstrap)
+- [aptのsource.listについて](https://gihyo.jp/admin/serial/01/ubuntu-recipe/0677)
