@@ -14,7 +14,9 @@ sudo chroot "$_MNT_DIR" << EOF
     apt update
     apt install -y --no-install-recommends linux-image-$_KERNEL_VER-generic \
         ubuntu-minimal \
+        initramfs-tools \
         $_KERNEL_OTHER_INSTALL
+    update-initramfs -c -k all
     exit
 EOF
 
