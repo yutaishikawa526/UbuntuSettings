@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# ディスク作成
+# イメージディスクの作成
 # それぞれefi用とroot用を作成する
 
 _DIR=$(cd $(dirname $0) ; pwd)

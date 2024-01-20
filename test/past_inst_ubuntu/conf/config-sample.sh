@@ -15,7 +15,7 @@ _EFI_PART=/dev/sdb1
 # rootパーティションのディスク
 _ROOT_PART=/dev/sdb2
 # カーネルバージョン
-_LINUX_KERNEL_VER=5.15.0-91
+_LINUX_KERNEL_VER=5.15.0-25
 # 127.0.0.1に設定するドメイン名
 _LOCALHOST=localhost
 # 追加するlinuxユーザーの名前

@@ -4,7 +4,7 @@
 # 参考サイト: https://gist.github.com/subrezon/9c04d10635ebbfb737816c5196c8ca24 , https://heywoodlh.io/minimal-ubuntu-install
 
 # 設定ファイルの読み込み
-conf_file_path=$(cd $(dirname $0) ;cd ../; pwd)/conf/config.sh
+conf_file_path=$(cd $(dirname $0) ; pwd)/conf/config.sh
 if [ ! -e "$conf_file_path" ]; then
     echo "設定ファイルが指定されていません。"
     exit
