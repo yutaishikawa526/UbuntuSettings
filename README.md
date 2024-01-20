@@ -2,34 +2,22 @@
 
 ## 概要
 - ubuntuのデスクトップインストール手順からインストール後の諸々設定手順を記述
+- `apt upgrade`を実行すると、カーネルのABIバージョンが上がり、OSに合わなくて起動できなくなることがあった
 
-## ubuntu手動インストール
-- [パーティション作成のシェル](/sh/setupPartition.sh)を実行する
-- [設定ファイル](/conf/ubuntu_conf-sample.sh)を適切に変更したものをファイル名を`ubuntu_conf.sh`で作成する
-- [ubuntu手動インストールのシェル](/sh/installUbuntu.sh)を実行し`reboot`する
+## ubuntu手動インストールの場合
+- [リドミ](/sh/install_ubuntu/README.md)を参考にしてubuntuをインストールする
+- その後[デスクトップ設定](/sh/setupUbuntuDesktop.sh)を行ってGUIも適切に設定する
+
+## 対話型自動インストールの場合
 - liveメディアによるインストールの場合は[ここ](https://lang-ship.com/blog/work/usb-ssd-ubuntu/)を参考にしてインストールする
-
-## 初回起動時
-- 初回起動時はgpuドライバーの問題で画面描画がおかしくなる
-- grub画面をshift連打で呼び出し、カーネルのコマンドに`nomodeset`を指定する
-
-## いくつかのパッケージインストール
-- `sudo apt-get install -y vim git curl`でvim,git,curlをインストール
-
-## nvidia driverインストール
-1. `sudo apt-get --purge remove nvidia-*`で既存のnvidiaドライバーのアンインストール
-2. `sudo apt-get --purge remove cuda-*`で既存のCUDAのアンインストール
-3. `sudo add-apt-repository ppa:graphics-drivers/ppa`
-4. `sudo apt update`
-5. `sudo apt install -y nvidia-driver-535`でドライバーインストール(535は`ubuntu-drivers devices`で確認)
-6. `sudo reboot`再起動
-7. `nvidia-smi`で確認
-
-## grub設定
-1. `/etc/default/grub`の`GRUB_DEFAULT`を`GRUB_DEFAULT="Advanced options for Ubuntu>Ubuntu, with Linux 6.2.0-26-generic"`に指定
-2. `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`を`GRUB_CMDLINE_LINUX_DEFAULT=""`に指定
-3. `/etc/default/grub`の`GRUB_DISABLE_OS_PROBER`を`GRUB_DISABLE_OS_PROBER=false`に指定
-4. `update-grub`を実行
+- 初回起動時
+    1. nvidiaのドライバーが悪さをして画面描画がおかしくなることがある
+    2. rub画面をshift連打で呼び出し、カーネルのコマンドに`nomodeset`を指定することで回避できる
+    3. その後適切にnvidiaのドライバーをインストールする
+- その後[デスクトップ設定](/sh/setupUbuntuDesktop.sh)を行う
+- grubを一部修正
+    1. `/etc/default/grub`の`GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"`を`GRUB_CMDLINE_LINUX_DEFAULT=""`に指定
+    2. `update-grub`を実行
 
 ## openVPN設定
 1. [サーバー側openVPN設定シェル](/sh/openVPNSettings.sh)の実行
@@ -47,7 +35,7 @@
 2. `~/sshSettings`にクライアント用の認証情報が作成されるので、接続するクライアントPCに鍵を移行してssh接続
     - [openVPN設定](#openVPN設定)を行ってから実行すること
     - クライアントの設定項目
-        - ipアドレスは10.8.0.1
+        - ipアドレスは10.8.0.1(VPN接続中なら)
         - ポートは22
 
 ## 参考サイト

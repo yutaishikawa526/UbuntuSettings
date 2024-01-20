@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 # バックアップを作成
-# 「現在日時_backup」という形式にディレクトリに作成される
 
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"

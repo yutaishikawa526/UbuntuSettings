@@ -11,8 +11,8 @@ source "$_DIR/conf/conf.sh"
 
 # efi用は512MB
 dd if=/dev/zero of="$_DISK_EFI" bs=512M count=1
-# root用は12GB
-dd if=/dev/zero of="$_DISK_ROOT" bs=1G count=12
+# root用は任意($_ROOT_DSIZE * 1GBのサイズとなる)
+dd if=/dev/zero of="$_DISK_ROOT" bs=1G count="$_ROOT_DSIZE"
 
 # フォーマット
 sudo mkfs.vfat "$_DISK_EFI"
