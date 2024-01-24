@@ -15,14 +15,11 @@ done << END
 END
 
 read -p ":" b_name
-backup_file="$_DIR/disk/$b_name/"`basename "$_DISK_IMG_PATH"`
+backup_dir="$_DIR/disk/$b_name"
 
-if [ ! -e "$backup_file" ]; then
+if [ ! -d "$backup_dir" ]; then
     echo 'バックアップが存在しません。'
     exit 1
 fi
 
-# umount
-bash "$_DIR/com/unset.sh"
-
-sudo cp "$backup_file" "$_DIR/disk"
+sudo rm -r "$backup_dir"

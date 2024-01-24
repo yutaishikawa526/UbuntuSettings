@@ -4,23 +4,17 @@
 
 _DIR=$(cd $(dirname $0) ; cd ../ ; pwd)
 source "$_DIR/conf/conf.sh"
+source "$_DIR/conf/conf_mnt.sh"
+source "$_DIR/com/com.sh"
 
-if [ ! -d "$_MNT_DIR" ] ;then
-    echo "$_MNT_DIR""は存在しません。"
-    exit 1
-fi
-if [ ! -e "$_DISK_EFI" ] ;then
-    echo "$_DISK_EFI""は存在しません。"
-    exit 1
-fi
-if [ ! -e "$_DISK_ROOT" ] ;then
-    echo "$_DISK_ROOT""は存在しません。"
-    exit 1
-fi
+is_dir "$_MNT_POINT"
+is_file "$_PAT_EFI" "$_PAT_BOOT" "$_PAT_ROOT"
 
 # umount
 bash "$_COM_DIR/unset.sh"
 
-sudo mount "$_DISK_ROOT" "$_MNT_DIR"
-sudo mkdir -p "$_MNT_DIR/boot/efi"
-sudo mount "$_DISK_EFI" "$_MNT_DIR/boot/efi"
+sudo mount "$_PAT_ROOT" "$_MNT_POINT"
+sudo mkdir -p "$_MNT_POINT/boot"
+sudo mount "$_PAT_BOOT" "$_MNT_POINT/boot"
+sudo mkdir -p "$_MNT_POINT/boot/efi"
+sudo mount "$_PAT_EFI" "$_MNT_POINT/boot/efi"

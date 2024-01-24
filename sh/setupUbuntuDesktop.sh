@@ -10,7 +10,7 @@ sudo apt update
 sudo apt install -y vim git curl
 
 # デスクトップ用パッケージのインストール
-sudo apt install -y ubuntu-desktop
+sudo apt install -y ubuntu-desktop-minimal
 
 # uefiの実行順序を変えられるツール
 sudo apt install -y efibootmgr

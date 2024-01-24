@@ -4,14 +4,12 @@
 
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
-source "$_DIR/conf/conf_mnt.sh"
-source "$_DIR/com/com.sh"
 
 # マウント
-bash "$_DIR/com/mount.sh"
-bash "$_DIR/com/sys_setup.sh"
+bash "$_COM_DIR/mount.sh"
+bash "$_COM_DIR/sys_setup.sh"
 
 sudo chroot "$_MNT_DIR"
 
 # umount
-bash "$_DIR/com/unset.sh"
+bash "$_COM_DIR/unset.sh"

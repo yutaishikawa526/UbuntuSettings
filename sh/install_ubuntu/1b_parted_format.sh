@@ -1,17 +1,20 @@
 #!/bin/bash -e
 
-# イメージディスクの作成とループバックへ登録
-# 引数としてディスクのサイズ(GB)を受け付ける
-# [total_gsize=12]という形式を受け付ける
+# ディスクのパーティション分けとフォーマット
+# 引数として、efiパーティションのサイズ、bootパーティションのサイズ、
+# ルートパーティションのサイズ、スワップパーティションのサイズ
+# を指定できる
+# それぞれ[efi_size=200M][boot_size=2G][root_size=10G][swap_size=4G]
+# という形式で指定する
+# スワップパーティションのみ未指定だと生成されない
 
-sudo apt install kpartx util-linux
+sudo apt install gdisk util-linux kpartx
 
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
 source "$_DIR/conf/conf_mnt.sh"
 source "$_DIR/com/com.sh"
 
-total_gsize=12
 efi_size='200M'
 boot_size='2G'
 root_size='10G'
@@ -26,22 +29,11 @@ for input in $@
         root_size=`echo "$input" | sed -r 's#^root_size=(.*)$#\1#g'`
     elif [[ "$input" =~ ^swap_size=.*$ ]]; then
         swap_size=`echo "$input" | sed -r 's#^swap_size=(.*)$#\1#g'`
-    elif [[ "$input" =~ ^total_gsize=.*$ ]]; then
-        total_gsize=`echo "$input" | sed -r 's#^total_gsize=(.*)$#\1#g'`
     fi
 done
 
-# ディスク作成
-dd if=/dev/zero of="$_DISK_IMG_PATH" bs=1G count="$total_gsize"
-
-# ループバックに書き込み
-loopback_path=`set_device "$_DISK_IMG_PATH"`
-
 # パーティション分け実行
-set_partion "$loopback_path" "$efi_size" "$boot_size" "$root_size" "$swap_size"
-
-# ループバック再書き込み
-loopback_path=`set_device "$_DISK_IMG_PATH"`
+set_partion "$_DISK_BASE" "$efi_size" "$boot_size" "$root_size" "$swap_size"
 
 # フォーマット
 set_format "$_DISK_BASE"
@@ -54,4 +46,3 @@ root_partid=`name_to_partid "$disk" 'root'`
 modify_conf '_PAT_EFI' "$_DIR/conf/conf_mnt.sh" "/dev/disk/by-partuuid/$efi_partid"
 modify_conf '_PAT_BOOT' "$_DIR/conf/conf_mnt.sh" "/dev/disk/by-partuuid/$boot_partid"
 modify_conf '_PAT_ROOT' "$_DIR/conf/conf_mnt.sh" "/dev/disk/by-partuuid/$root_partid"
-modify_conf '_DISK_BASE' "$_DIR/conf/conf.sh" "$loopback_path"

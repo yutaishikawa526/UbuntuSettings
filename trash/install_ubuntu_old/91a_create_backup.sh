@@ -4,12 +4,10 @@
 
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
-source "$_DIR/conf/conf_mnt.sh"
-source "$_DIR/com/com.sh"
 
 echo 'バックアップ名を入力してください。'
 read -p ":" b_name
-backup_dir="$_DIR/disk/$b_name"
+backup_dir="$_DISK_DIR/$b_name"
 if [[ "$b_name" =~ ^$ ]]; then
     echo 'バックアップ名が未指定です。'
     exit 1
@@ -22,6 +20,7 @@ fi
 sudo mkdir "$backup_dir"
 
 # umount
-bash "$_DIR/com/unset.sh"
+bash "$_COM_DIR/unset.sh"
 
-sudo cp "$_DISK_IMG_PATH" "$backup_dir"
+sudo cp "$_DISK_EFI" "$backup_dir"
+sudo cp "$_DISK_ROOT" "$backup_dir"

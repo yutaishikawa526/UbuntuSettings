@@ -2,9 +2,7 @@
 - ubuntuの手動でのインストールするためのシェル
 - インストール対象のデバイスとは別のデバイス上で実行する
 - シェルの実行前に`./conf/conf-sample.sh`の記載に従い、適切に設定ファイルを作成する
-- シェルの実行前に`./conf/conf_mnt-sample.sh`の記載に従い、適切にディスク情報を作成する
-    - ただし、`1a_create_disk.sh`か`1b_parted_format.sh`を実行する場合は自動で設定されるため、ファイルの用意でよい
-- 最初にディスクを初期化する方法として`1a_create_disk.sh`と`1b_parted_format.sh`の2種類ある
+- 最初にディスクを初期化する方法として`1a_create_disk.sh`と`1b_setup_partition.sh`の2種類ある
 - カーネルのバージョンは[ここ](https://www.hpe.com/jp/ja/servers/linux/matrix/index-26-ubuntu.html)から最適なバージョンを確認する
     - `apt upgrade`を実行すると、カーネルのバージョンが上がり、OSに合わなくて起動できなくなることがあった
 
@@ -12,12 +10,12 @@
 
 - `1a_create_disk.sh`
 ディスクイメージを直接作成する\
-`./disk`ディレクトリに生成される\
-`91a_~~`から`93a_~`によって、バックアップ&復元ができる
-`./conf/conf.sh`の`_DISK_BASE`は中で適切に設定される
+efi用とroot用の2種類作成し、それぞれ`./disk`ディレクトリに生成される\
+`91a_~~`から`94a_~`によって、バックアップ&復元ができる
 
-- `1b_parted_format.sh`
-物理ディスクに対してパーティションの作成を行う
+- `1b_setup_partition.sh`
+物理ディスクに対してパーティションの作成を行う\
+パーティション構成は`/`と`/boot/efi`をマウントする2つの構成となる
 
 - `2_debootstrap.sh`
 デブートストラップを実行する\
@@ -41,7 +39,7 @@ umountする。`81_open.sh`をした場合にのみ利用する
 - `83_chroot.sh`
 mountをし、chrootをする。exit後、umountまで行う
 
-- `91a_~`から`93a_~`
+- `91a_~`から`94a_~`
 `1a_create_disk.sh`で生成されたdiskイメージにのみ有効\
 `1b_~`で使用した場合にどうなるかはわからない
 

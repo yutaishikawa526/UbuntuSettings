@@ -5,14 +5,13 @@
 
 _DIR=$(cd $(dirname $0) ; cd ../ ; pwd)
 source "$_DIR/conf/conf.sh"
+source "$_DIR/conf/conf_mnt.sh"
+source "$_DIR/com/com.sh"
 
-if [ ! -d "$_MNT_DIR/sys" ] || [ ! -d "$_MNT_DIR/dev" ] || [ ! -d "$_MNT_DIR/proc" ] || [ ! -d "$_MNT_DIR/etc" ]; then
-    echo 'debootstrapのあとに実行します。'
-    exit 1
-fi
+is_dir "$_MNT_POINT/sys" "$_MNT_POINT/dev" "$_MNT_POINT/proc" "$_MNT_POINT/etc"
 
-sudo mount --bind /sys "$_MNT_DIR/sys"
-sudo mount --bind /dev "$_MNT_DIR/dev"
-sudo mount --bind /proc "$_MNT_DIR/proc"
+sudo mount --bind /sys "$_MNT_POINT/sys"
+sudo mount --bind /dev "$_MNT_POINT/dev"
+sudo mount --bind /proc "$_MNT_POINT/proc"
 
 sudo cp /etc/resolv.conf "$_MNT_DIR/etc/resolv.conf"
