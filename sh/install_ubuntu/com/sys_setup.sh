@@ -14,4 +14,4 @@ sudo mount --bind /sys "$_MNT_POINT/sys"
 sudo mount --bind /dev "$_MNT_POINT/dev"
 sudo mount --bind /proc "$_MNT_POINT/proc"
 
-sudo cp /etc/resolv.conf "$_MNT_DIR/etc/resolv.conf"
+sudo cp /etc/resolv.conf "$_MNT_POINT/etc/resolv.conf"

@@ -2,6 +2,26 @@
 
 # 共通の関数
 
+# 関数が定義済みか確認
+function check_func(){
+    func_name=$1
+    apt_pkg=$2
+
+    path=`which "$func_name"`
+
+    if [[ ! -e "$path" ]]; then
+        sudo apt install -y "$apt_pkg"
+    fi
+}
+
+check_func 'sgdisk' 'gdisk'
+check_func 'partprobe' 'parted'
+check_func 'losetup' 'mount'
+check_func 'kpartx' 'kpartx'
+check_func 'mkfs.vfat' 'dosfstools'
+check_func 'mkfs.ext4' 'e2fsprogs'
+check_func 'mkswap' 'util-linux'
+
 # ディレクトリか
 function is_dir(){
     for i in $@
@@ -47,6 +67,15 @@ function set_partion(){
         sudo sgdisk --new "5::+$swap_size" "$disk"
     fi
 
+    # パーティションコード指定
+    sudo sgdisk --typecode 1:ef02 "$disk"
+    sudo sgdisk --typecode 2:ef00 "$disk"
+    sudo sgdisk --typecode 3:8300 "$disk"
+    sudo sgdisk --typecode 4:8300 "$disk"
+    if [[ "$swap_size" != 'no' ]]; then
+        sudo sgdisk --typecode 5:8200 "$disk"
+    fi
+
     # 名前付け
     sudo sgdisk --change-name '1:biosgrub' "$disk"
     sudo sgdisk --change-name '2:efi' "$disk"
@@ -64,15 +93,15 @@ function set_partion(){
 function name_to_partid(){
     disk=$1
     name=$2
-    num=`sudo gdisk -l "$disk" | grep -E '^ +[1-9][0-9]* +.*[ ]+'$name'$' | sed -r 's#^ +([1-9][0-9]*) +.*[ ]+'$name'$#\1#g' | head -n 1`
+    num=`sudo gdisk -l "$disk" | grep -E '^ +[1-9][0-9]* +.* +'$name'$' | sed -r 's#^ +([1-9][0-9]*) +.* +'$name'$#\1#g' | head -n 1`
     if ! [[ $num =~ ^.+$ ]]; then
         echo 'no'
-
+        exit
     fi
-    partid_large=`sudo sgdisk "$disk" "-i=$num" | grep '^Partition unique GUID:' | sed -i 's#^Partition unique GUID: +([^ ]+)$#\1#g' | head -n 1`
+    partid_large=`sudo sgdisk "$disk" "-i=$num" | grep '^Partition unique GUID:' | sed -r 's#^Partition unique GUID: +([^ ]+)$#\1#g' | head -n 1`
     if ! [[ $partid_large =~ ^.+$ ]]; then
         echo 'no'
-
+        exit
     fi
     echo "$partid_large" | tr '[:upper:]' '[:lower:]'
 }
@@ -87,7 +116,7 @@ function set_format(){
     root_partid=`name_to_partid "$disk" 'root'`
     swap_partid=`name_to_partid "$disk" 'swap'`
 
-    sudo mkfs.vfat "/dev/disk/by-partuuid/$efi_num"
+    sudo mkfs.vfat "/dev/disk/by-partuuid/$efi_partid"
     sudo mkfs.ext4 "/dev/disk/by-partuuid/$boot_partid"
     sudo mkfs.ext4 "/dev/disk/by-partuuid/$root_partid"
     if [[ $swap_partid != 'no' ]]; then
@@ -104,10 +133,24 @@ function modify_conf(){
     # 設定ファイルの書き換え
     count=`cat "$conf_path" | grep -E '^'$conf_name'=.*$' | wc -l`
     if [[ "$count" -ge 1 ]]; then
-        sudo sed -i 's#^('$conf_name'=).*$#\1'$new_value'#g'
+        sudo sed -i 's#^'$conf_name'=.*$#'$conf_name'='$new_value'#g' "$conf_path"
     else
-        sudo sed -i '2a '$conf_name'='$new_value
+        sudo sed -i '2a '$conf_name'='$new_value "$conf_path"
     fi
+}
+
+# ディスクイメージファイルのループバックディスクを解除する
+function unset_device(){
+    disk=$1
+
+    sudo losetup | grep "$disk" \
+        | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' \
+        | xargs -I lpdk sudo kpartx -d 'lpdk'
+
+    sudo losetup | grep "$disk" \
+        | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' \
+        | xargs -I lpdk sudo losetup -d 'lpdk'
+
 }
 
 # ディスクイメージファイルをループバックディスクに展開する
@@ -115,16 +158,32 @@ function modify_conf(){
 function set_device(){
     disk=$1
 
-    sudo losetup | grep "$disk" \
-        | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' \
-        | xargs sudo kpartx -d
-
-    sudo losetup | grep "$disk" \
-        | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' \
-        | xargs sudo losetup -d
+    unset_device "$disk"
 
     sudo kpartx -a "$disk"
     loopback=`sudo losetup | grep "$disk" | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' | head -n 1`
     is_file "$loopback"
     echo "$loopback"
+}
+
+# ディスクイメージから設定ファイルの書き換え
+# $1:ディスクイメージファイル
+# $2:設定ファイルのディレクトリのパス
+function set_device_from_disk_img(){
+    disk=$1
+    conf_dir=$2
+
+    loopback=`sudo losetup | grep "$disk" | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' | head -n 1`
+    is_file "$loopback"
+
+    # 設定ファイルの書き換え
+    efi_partid=`name_to_partid "$loopback" 'efi'`
+    boot_partid=`name_to_partid "$loopback" 'boot'`
+    root_partid=`name_to_partid "$loopback" 'root'`
+
+    modify_conf '_PAT_EFI' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$efi_partid"
+    modify_conf '_PAT_BOOT' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$boot_partid"
+    modify_conf '_PAT_ROOT' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$root_partid"
+
+    modify_conf '_DISK_BASE' "$conf_dir/conf.sh" "$loopback"
 }

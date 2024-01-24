@@ -11,7 +11,7 @@ is_dir "$_MNT_POINT"
 is_file "$_PAT_EFI" "$_PAT_BOOT" "$_PAT_ROOT"
 
 # umount
-bash "$_COM_DIR/unset.sh"
+bash "$_DIR/com/unset.sh"
 
 sudo mount "$_PAT_ROOT" "$_MNT_POINT"
 sudo mkdir -p "$_MNT_POINT/boot"

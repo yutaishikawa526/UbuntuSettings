@@ -2,3 +2,4 @@
 !/.gitignore
 !/conf-sample.sh
 !/conf_mnt-sample.sh
+!/conf_part-sample.sh

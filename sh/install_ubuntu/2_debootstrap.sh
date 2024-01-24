@@ -2,13 +2,13 @@
 
 # debootstrapの実行
 
-sudo apt update
-sudo apt install -y debootstrap
-
 _DIR=$(cd $(dirname $0) ; pwd)
 source "$_DIR/conf/conf.sh"
 source "$_DIR/conf/conf_mnt.sh"
 source "$_DIR/com/com.sh"
+
+check_func 'debootstrap' 'debootstrap'
+check_func 'genfstab' 'arch-install-scripts'
 
 # マウント
 bash "$_DIR/com/mount.sh"

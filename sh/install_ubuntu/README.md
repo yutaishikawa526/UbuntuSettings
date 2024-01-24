@@ -4,6 +4,8 @@
 - シェルの実行前に`./conf/conf-sample.sh`の記載に従い、適切に設定ファイルを作成する
 - シェルの実行前に`./conf/conf_mnt-sample.sh`の記載に従い、適切にディスク情報を作成する
     - ただし、`1a_create_disk.sh`か`1b_parted_format.sh`を実行する場合は自動で設定されるため、ファイルの用意でよい
+- シェルの実行前に`./conf/conf_part-sample.sh`
+    - ただし、`1a_create_disk.sh`か`1b_parted_format.sh`を実行する場合にのみ使用する
 - 最初にディスクを初期化する方法として`1a_create_disk.sh`と`1b_parted_format.sh`の2種類ある
 - カーネルのバージョンは[ここ](https://www.hpe.com/jp/ja/servers/linux/matrix/index-26-ubuntu.html)から最適なバージョンを確認する
     - `apt upgrade`を実行すると、カーネルのバージョンが上がり、OSに合わなくて起動できなくなることがあった
@@ -31,6 +33,12 @@
 
 - `5_grub_install.sh`
 grubのインストールを行う
+
+- `71_connect_disk.sh`
+ディスクイメージファイルをループバックディスクに展開し、設定ファイルのmntとディスクファイルの値を書き換える
+
+- `72a_disconnect_disk.sh`
+ディスクイメージファイルをループバックディスクから解除する
 
 - `81_open.sh`
 マウントを実行する
