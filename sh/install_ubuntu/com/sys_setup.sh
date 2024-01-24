@@ -12,6 +12,9 @@ is_dir "$_MNT_POINT/sys" "$_MNT_POINT/dev" "$_MNT_POINT/proc" "$_MNT_POINT/etc"
 
 sudo mount --bind /sys "$_MNT_POINT/sys"
 sudo mount --bind /dev "$_MNT_POINT/dev"
+if [ -d '/dev/pts' ]; then
+    sudo mount --bind /dev/pts "$_MNT_POINT/dev/pts"
+fi
 sudo mount --bind /proc "$_MNT_POINT/proc"
 
 sudo cp /etc/resolv.conf "$_MNT_POINT/etc/resolv.conf"
