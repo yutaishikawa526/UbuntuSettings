@@ -9,3 +9,6 @@ _PAT_EFI=/dev/sda2
 _PAT_BOOT=/dev/sda3
 # rootマウントパーティション
 _PAT_ROOT=/dev/sda4
+# swapマウントパーティション
+# 空文字の場合は使用しない
+_PAT_SWAP=/dev/sda5

@@ -7,9 +7,9 @@ function check_func(){
     func_name=$1
     apt_pkg=$2
 
-    path=`which "$func_name"`
+    count=`which "$func_name" | wc -l`
 
-    if [[ ! -e "$path" ]]; then
+    if [[ $count == 0 ]]; then
         sudo apt install -y "$apt_pkg"
     fi
 }
@@ -21,6 +21,7 @@ check_func 'kpartx' 'kpartx'
 check_func 'mkfs.vfat' 'dosfstools'
 check_func 'mkfs.ext4' 'e2fsprogs'
 check_func 'mkswap' 'util-linux'
+check_func 'findfs' 'util-linux'
 
 # ディレクトリか
 function is_dir(){
@@ -116,11 +117,11 @@ function set_format(){
     root_partid=`name_to_partid "$disk" 'root'`
     swap_partid=`name_to_partid "$disk" 'swap'`
 
-    sudo mkfs.vfat "/dev/disk/by-partuuid/$efi_partid"
-    sudo mkfs.ext4 "/dev/disk/by-partuuid/$boot_partid"
-    sudo mkfs.ext4 "/dev/disk/by-partuuid/$root_partid"
+    sudo mkfs.vfat `sudo findfs PARTUUID="$efi_partid"`
+    sudo mkfs.ext4 `sudo findfs PARTUUID="$boot_partid"`
+    sudo mkfs.ext4 `sudo findfs PARTUUID="$root_partid"`
     if [[ $swap_partid != 'no' ]]; then
-        sudo mkswap "/dev/disk/by-partuuid/$swap_partid"
+        sudo mkswap `sudo findfs PARTUUID="$swap_partid"`
     fi
 }
 
@@ -166,24 +167,26 @@ function set_device(){
     echo "$loopback"
 }
 
-# ディスクイメージから設定ファイルの書き換え
-# $1:ディスクイメージファイル
+# デバイスから設定ファイルの書き換え
+# $1:デバイスのパス
 # $2:設定ファイルのディレクトリのパス
-function set_device_from_disk_img(){
-    disk=$1
+function set_conf_by_device(){
+    device=$1
     conf_dir=$2
 
-    loopback=`sudo losetup | grep "$disk" | sed -r 's#^(/dev/loop[0-9]+) *.*$#\1#g' | head -n 1`
-    is_file "$loopback"
+    efi_partid=`name_to_partid "$device" 'efi'`
+    boot_partid=`name_to_partid "$device" 'boot'`
+    root_partid=`name_to_partid "$device" 'root'`
+    swap_partid=`name_to_partid "$device" 'swap'`
 
-    # 設定ファイルの書き換え
-    efi_partid=`name_to_partid "$loopback" 'efi'`
-    boot_partid=`name_to_partid "$loopback" 'boot'`
-    root_partid=`name_to_partid "$loopback" 'root'`
+    modify_conf '_PAT_EFI' "$conf_dir/conf_mnt.sh" `sudo findfs PARTUUID="$efi_partid"`
+    modify_conf '_PAT_BOOT' "$conf_dir/conf_mnt.sh" `sudo findfs PARTUUID="$boot_partid"`
+    modify_conf '_PAT_ROOT' "$conf_dir/conf_mnt.sh" `sudo findfs PARTUUID="$root_partid"`
+    if [[ $swap_partid != 'no' ]]; then
+        modify_conf '_PAT_SWAP' "$conf_dir/conf_mnt.sh" `sudo findfs PARTUUID="$swap_partid"`
+    else
+        modify_conf '_PAT_SWAP' "$conf_dir/conf_mnt.sh" ''
+    fi
 
-    modify_conf '_PAT_EFI' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$efi_partid"
-    modify_conf '_PAT_BOOT' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$boot_partid"
-    modify_conf '_PAT_ROOT' "$conf_dir/conf_mnt.sh" "/dev/disk/by-partuuid/$root_partid"
-
-    modify_conf '_DISK_BASE' "$conf_dir/conf.sh" "$loopback"
+    modify_conf '_DISK_BASE' "$conf_dir/conf.sh" "$device"
 }

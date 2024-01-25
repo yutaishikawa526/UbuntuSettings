@@ -14,4 +14,4 @@ bash "$_DIR/com/unset.sh"
 loopback_path=`set_device "$_DISK_IMG_PATH"`
 
 # 設定ファイルの書き換え
-set_device_from_disk_img "$_DISK_IMG_PATH" "$_DIR/conf"
+set_conf_by_device "$loopback_path" "$_DIR/conf"
